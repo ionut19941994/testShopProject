@@ -1,4 +1,5 @@
 /.idea/
-/reports
+/reports/
 /target/generated-test-sources
 /target/test-classes
+/target/

@@ -22,7 +22,7 @@
     * Class: cucumber.runner.TestRunner
     * Use classpath of module the <project folder>
     * Save configuration name as desired
-    * Add @Test as tags above the tests in order to run in the feature file
+    * Add @test as tags above the tests in order to run in the feature file
 
 ## Test Report
 
