@@ -1,5 +1,8 @@
 package cucumber;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
@@ -13,6 +16,8 @@ public class Base {
 
     public static WebDriver getDriver() throws IOException
     {
+        BasicConfigurator.configure();
+        Logger.getRootLogger().setLevel(Level.OFF);
         prop=new Properties();
         FileInputStream fis=new FileInputStream("src/test/resources/environments/environment.properties");
         prop.load(fis);

@@ -5,16 +5,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.FindBy;
 
-import javax.lang.model.util.Elements;
-import javax.swing.*;
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static java.lang.Float.valueOf;
 
 public class homePage extends Base {
 
@@ -24,14 +18,30 @@ public class homePage extends Base {
         return driver.findElements(product2);
     }
 
-    By price=By.xpath("//td[@class='product-subtotal']//following-sibling::span");
+    By updateButton=By.xpath("//a[contains(text(),'Add to cart')]//parent::div");
 
-    public WebElement price(){
-        return driver.findElement(price);
+    public WebElement updateButton(){
+        return driver.findElement(updateButton);
     }
 
-    By cartItem=By.xpath("//tr[@class='woocommerce-cart-form__cart-item cart_item']");
+    By xButton=By.cssSelector("td.product-remove>a");
 
+    public List<WebElement> xButtons(){
+        return driver.findElements(xButton);
+    }
+
+    By price=By.cssSelector("td.product-subtotal>span");
+
+    public List<WebElement> prices(){
+        return driver.findElements(price);
+    }
+
+    By cartElement=By.xpath("//tr[@class='woocommerce-cart-form__cart-item cart_item']");
+    public List<WebElement> cartElements() {
+        return driver.findElements(cartElement);
+    }
+
+    By cartItem=By.xpath("//input[@type!='hidden' and @value!='']");
     public List<WebElement> cartItems() {
         return driver.findElements(cartItem);
     }
@@ -68,20 +78,49 @@ public class homePage extends Base {
     }
 
     public int howManyItems() {
-        return cartItems().size();
+        int s=0, i=0;
+        while( i<cartElements().size())
+            {
+                String l = cartItems().get(i).getAttribute( "value");
+                s+= Integer.parseInt(l);
+                i++;
+            }
+        return s;
     }
 
     public float lowestPrice() {
-        int l=Integer.parseInt(price().toString().replaceAll("$","").replaceAll(".00",""));
-        for( int i=0; i< cartItems().size();i++){
-             if(Integer.parseInt(price().toString().replaceAll("$","").replaceAll(".00",""))<l)
-                 l= Integer.parseInt(price().toString().replaceAll("$","").replaceAll(".00",""));
+        String p=prices().get(0).getText().replace("$","");
+        float l=Float.parseFloat(p);
+        int i=1;
+        while(i < cartElements().size())
+        {
+            p=prices().get(i).getText().replace("$","");
+             if(Float.parseFloat(p)<l)
+                 l= Float.parseFloat(p);
+             i++;
         }
         return l;
     }
 
+    public void removeLowestPrice() {
+        String p=prices().get(0).getText().replace("$","");
+        float l=Float.parseFloat(p);
+        int i=1,j=0;
+        while(i < cartElements().size())
+        {
+            p=prices().get(i).getText().replace("$","");
+            if(Float.parseFloat(p)<l) {
+                l = Float.parseFloat(p);
+                j=i;
+            }
+            i++;
+        }
+        xButtons().get(j).click();
+    }
 
-
+    public boolean verifyUpdateButton() {
+        return updateButton().isEnabled();
+    }
 
     public void selectRandomProductAndAddToCart() {
         Random random = new Random();

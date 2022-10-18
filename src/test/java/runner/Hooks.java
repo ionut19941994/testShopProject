@@ -12,7 +12,7 @@ public class Hooks extends Base {
 
     @After("@test")
     public void afterSeleniumTest() {
-        try {driver.close();}
+        try {driver.quit();}
         catch (NullPointerException npe) {
             System.out.println("Exception caught");
         }
